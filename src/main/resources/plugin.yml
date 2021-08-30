@@ -1,0 +1,5 @@
+name: CombatLog
+version: ${project.version}
+main: me.axilirate.combatlog.CombatLog
+api-version: 1.17
+depend: [DeathGhost]
