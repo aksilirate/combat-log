@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -26,9 +27,12 @@ public class EventListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        if (combatLog.deathGhost.isPlayerDead(player.getUniqueId().toString())) {
-            return;
+        if (combatLog.deathGhost != null){
+            if (combatLog.deathGhost.isPlayerDead(player.getUniqueId().toString())) {
+                return;
+            }
         }
+
 
 
         if (loggedPlayers.contains(player.getName())) {
@@ -39,7 +43,7 @@ public class EventListener implements Listener {
     }
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
 
         if (!(event.getDamager() instanceof Player)) {
@@ -50,6 +54,13 @@ public class EventListener implements Listener {
             return;
         }
 
+        if (event.getDamage() <= 0.0){
+            return;
+        }
+
+        if (event.isCancelled()){
+            return;
+        }
 
         final Player player = (Player) event.getEntity();
         final Player damager = (Player) event.getDamager();
