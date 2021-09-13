@@ -27,8 +27,8 @@ public class EventListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        if (combatLog.deathGhost != null){
-            if (combatLog.deathGhost.isPlayerDead(player.getUniqueId().toString())) {
+        if (combatLog.getDeathGhost() != null){
+            if (combatLog.getDeathGhost().isPlayerDead(player.getUniqueId().toString())) {
                 return;
             }
         }
@@ -79,8 +79,8 @@ public class EventListener implements Listener {
         loggedPlayers.add(damager.getName());
 
 
-        player.sendMessage(ChatColor.RED + "You're now in Combat! Leaving the server in the next 30 seconds will kill you");
-        damager.sendMessage(ChatColor.RED + "You're now in Combat! Leaving the server in the next 30 seconds will kill you");
+        player.sendMessage(ChatColor.RED + "You're now in Combat! Leaving the server in the next " + combatLog.combatLogTime + " seconds will kill you");
+        damager.sendMessage(ChatColor.RED + "You're now in Combat! Leaving the server in the next " + combatLog.combatLogTime + " seconds will kill you");
 
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(combatLog, () -> {
 
@@ -98,7 +98,7 @@ public class EventListener implements Listener {
 
         }
 
-                , 600);
+                , 20 * combatLog.combatLogTime);
 
 
     }
